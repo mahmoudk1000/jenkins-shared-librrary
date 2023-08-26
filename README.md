@@ -34,7 +34,7 @@ The `Docker` class in this shared library provides functions for interacting wit
 
 - `Docker.dockerPushImage(imageName)`: Push image to docker registry.
 
-- `Docker.runDockerContainer(imageName, options, containerName)`: Run a Docker container from the specified image, allowing you to provide custom options.
+- `Docker.runDockerContainer(containerName, containerTag, options)`: Run a Docker container from the specified image, allowing you to provide custom options.
 
 #### Example Usage
 
@@ -51,7 +51,7 @@ node {
         def dockerfilePath = 'Dockerfile'
         def buildArgs = ['VERSION=1.0', 'DEBUG=true']
 
-        docker.buildImage(imageName, dockerfilePath, buildArgs)
+        docker.buildDockerImage(imageName, dockerfilePath, buildArgs)
     }
 }
 ```

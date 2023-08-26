@@ -13,14 +13,14 @@ class Docker implements Serializable {
 
     def dockerLogin() {
         script.withCredentials([script.usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVaribale: 'USER')]) {
-            script.sh "echo $script.PASS | docker login -u $script.USER --password-stdin'
+            script.sh "echo $script.PASS | docker login -u $script.USER --password-stdin"
         }
     }
 
     def customDockerLogin(String username, String password, String registryUrl) {
         script.echo "Logging in to Docker registry..."
     
-        script.sh "docker login -u $username -p $password $registryUrl"
+        script.sh "echo $password | docker login -u $username -password-stdin $registryUrl"
     }
 
     def buildDockerImage(String imageName, String dockerfilePath = 'Dockerfile', Map<String, String> buildArgs) {
@@ -28,7 +28,6 @@ class Docker implements Serializable {
 
             def buildArgsString = buildArgs.collect { key, value -> "--build-arg ${key}=${value}" }.join(' ')
             script.sh "docker build -t $imageName -f $dockerfilePath $buildArgsString ."
-        }
     }
 
     def dockerPushImage(String imageName) {
@@ -37,10 +36,10 @@ class Docker implements Serializable {
         script.sh "docker push $imageName"
     }
 
-    def runDockerContainer(String imageName, String containerName, List<String> options = []) {
+    def runDockerContainer(String containerName, String containerTag, List<String> options = []) {
         script.echo "Running Docker container..."
         
         def optionsString = options.join(' ')
-        script.sh "docker run --name $containerName $optionsString $imageName"
-}
+        script.sh "docker run -d $options $containerName:$containerTag"
+    }
 }
