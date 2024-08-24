@@ -11,11 +11,9 @@ class Kaniko implements Serializable {
         this.script = script
     }
 
-    def buildPush(String imageName, String tag) {
-        def appName = imageName.contains('/') ? imageName.split('/')[1] : ""
-
+    def buildPush(String regDest, String imageName, String tag) {
         script.sh label: "Build and push image ${imageName}:${tag}",
-            script: "/kaniko/executor -f `pwd`/Dockerfile.${appName} --context `pwd` --destination ${imageName}:${tag}"
+            script: "/kaniko/executor -f `pwd`/Dockerfile.${imageName} --context `pwd` --destination ${regDest}/${imageName}:${tag}"
     }
 
 }
