@@ -13,7 +13,7 @@ class Kaniko implements Serializable {
 
     def buildPush(String regDest, String imageName, String tag) {
         script.sh label: "Build and push image ${imageName}:${tag}",
-            script: "/kaniko/executor -f `pwd`/Dockerfile.${imageName} --context `pwd` --destination ${regDest}/${imageName}:${tag}"
+            script: "/kaniko/executor --dockerfile `pwd`/Dockerfile.${imageName} --context `pwd` --insecure --skip-tls-verify --destination ${regDest}/${imageName}:${tag}"
     }
 
 }
